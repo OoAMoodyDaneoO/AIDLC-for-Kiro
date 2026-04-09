@@ -1,0 +1,11 @@
+{
+  "name": "frontend-developer",
+  "description": "AI-DLC frontend developer for HTML, CSS, JS, React, accessibility.",
+  "prompt": "file://./prompts/frontend-developer.md",
+  "tools": ["read", "write", "shell"],
+  "allowedTools": ["read"],
+  "resources": [
+    "file://.kiro/steering/**/*.md",
+    "skill://.kiro/skills/**/SKILL.md"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Update Progress",
+  "description": "After the agent stops, marks completed steps in active plan files and updates aidlc-state.md.",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Progress Update: If you were executing steps from an AI-DLC plan file (in aidlc-docs/*/inception/plans/ or aidlc-docs/*/construction/plans/), mark completed steps as [x]. Also update the feature's aidlc-state.md if it exists. If no plan was active, skip."
+  }
+}

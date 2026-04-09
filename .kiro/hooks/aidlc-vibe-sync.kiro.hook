@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Vibe Mode Sync",
+  "description": "After each user prompt, reminds the agent that any changes made during vibe interactions must be reflected in BOTH the AI-DLC artifacts (aidlc-docs/) AND the corresponding Kiro spec (project-specs/). Ensures bidirectional consistency.",
+  "version": "1",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": [
+      "write"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Vibe Sync: You just wrote to a file. If this change affects AI-DLC artifacts or Kiro specs, ensure BOTH are in sync. Specifically: if you updated an AI-DLC artifact (aidlc-docs/*/), check if a corresponding Kiro spec exists (.kiro/specs/project-specs/*/). If so, update the relevant spec file (requirement.md, design.md, or tasks.md) to reflect the change. Conversely, if you updated a Kiro spec file, update the corresponding AI-DLC artifact. Extract the feature name from the file path to match them. If no spec exists yet (Construction design not complete), skip the spec sync."
+  }
+}

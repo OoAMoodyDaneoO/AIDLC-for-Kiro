@@ -1,0 +1,8 @@
+{
+  "name": "sre-engineer",
+  "description": "AI-DLC SRE engineer for monitoring, observability, and incident response.",
+  "prompt": "file://./prompts/sre-engineer.md",
+  "tools": ["read", "write", "shell"],
+  "allowedTools": ["read"],
+  "resources": ["file://.kiro/steering/**/*.md", "skill://.kiro/skills/**/SKILL.md"]
+}

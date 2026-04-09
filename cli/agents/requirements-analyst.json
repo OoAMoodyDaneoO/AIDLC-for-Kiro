@@ -1,0 +1,12 @@
+{
+  "name": "requirements-analyst",
+  "description": "AI-DLC requirements analyst for requirements gathering and intent analysis.",
+  "prompt": "file://./prompts/requirements-analyst.md",
+  "tools": ["read", "write", "shell"],
+  "allowedTools": ["read"],
+  "resources": [
+    "file://.kiro/steering/**/*.md",
+    "file://.kiro/aws-aidlc-rule-details/inception/requirements-analysis.md",
+    "skill://.kiro/skills/**/SKILL.md"
+  ]
+}

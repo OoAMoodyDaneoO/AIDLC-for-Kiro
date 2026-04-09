@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Sync Task Completion to Plan",
+  "description": "After a spec task is completed in Kiro, syncs the completion status back to the corresponding AI-DLC construction plan checkboxes for bidirectional traceability.",
+  "version": "1",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Bidirectional Sync: A spec task was just completed. Check which project spec task was marked done (look in .kiro/specs/project-specs/*/tasks.md for recently completed tasks). Then find the corresponding AI-DLC construction plan (aidlc-docs/*/construction/plans/*.md) and mark the matching step as [x] there too. Also update the feature's aidlc-state.md if applicable. This keeps both the Kiro spec and AI-DLC plan in sync."
+  }
+}

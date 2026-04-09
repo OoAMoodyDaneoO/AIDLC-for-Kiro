@@ -1,0 +1,8 @@
+{
+  "name": "security-engineer",
+  "description": "AI-DLC security engineer for OWASP, vulnerability assessment, and secure coding.",
+  "prompt": "file://./prompts/security-engineer.md",
+  "tools": ["read", "write"],
+  "allowedTools": ["read"],
+  "resources": ["file://.kiro/steering/**/*.md", "skill://.kiro/skills/**/SKILL.md"]
+}

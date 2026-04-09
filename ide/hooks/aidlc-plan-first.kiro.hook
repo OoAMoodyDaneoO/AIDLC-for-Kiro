@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Plan Before Execute",
+  "description": "Before any write operation, reminds the agent to follow the AI-DLC plan-then-validate-then-execute cycle.",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Checkpoint: Before writing this file, verify you are following the AI-DLC workflow. ALWAYS ALLOWED without a plan: writing to .kiro/ (steering, hooks, rule-details, specs), writing to aidlc-docs/*/audit.md, writing to aidlc-docs/*/inception/intent/ (intent artifacts are mandatory), writing plan files to aidlc-docs/*/inception/plans/ or aidlc-docs/*/construction/plans/, and writing aidlc-docs/*/aidlc-state.md. For ALL OTHER writes (code, design artifacts, stories, requirements), confirm: 1) A corresponding plan .md file exists with checkboxes, 2) The user has explicitly approved the plan, 3) You are executing an approved step. If not, stop and create the plan first."
+  }
+}

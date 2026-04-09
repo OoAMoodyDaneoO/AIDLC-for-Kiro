@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Sync Requirements to Spec",
+  "description": "When AI-DLC inception requirement files are edited, updates the corresponding Kiro project spec requirement.md.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["aidlc-docs/*/inception/requirements/*.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Spec Sync: An AI-DLC inception requirements file was updated. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/requirements/...). Then check if .kiro/specs/project-specs/{feature-name}/requirement.md exists. If it does, update it to reflect the latest requirements. Add #[[file:...]] references. If the spec doesn't exist yet, skip this sync."
+  }
+}

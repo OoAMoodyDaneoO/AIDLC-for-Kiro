@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Audit Log",
+  "description": "After each user prompt, appends the user's complete raw input to the active feature's audit.md.",
+  "version": "1",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Audit: Find the active feature's audit.md. Check aidlc-docs/*/audit.md for existing audit files. If one exists, APPEND (never overwrite) the user's latest input in ISO 8601 format. If no audit.md exists yet, skip."
+  }
+}

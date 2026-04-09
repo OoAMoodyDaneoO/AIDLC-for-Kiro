@@ -1,0 +1,23 @@
+{
+  "name": "aidlc-orchestrator",
+  "description": "AI-DLC workflow orchestrator. Routes work to specialist agents.",
+  "prompt": "file://./prompts/aidlc-orchestrator.md",
+  "tools": ["*"],
+  "allowedTools": ["read", "write"],
+  "resources": [
+    "file://.kiro/steering/**/*.md",
+    "skill://.kiro/skills/**/SKILL.md"
+  ],
+  "includeMcpJson": true,
+  "hooks": {
+    "userPromptSubmit": [
+      { "command": "echo 'AI-DLC: Log user input to audit.md'" }
+    ],
+    "stop": [
+      { "command": "echo 'AI-DLC: Update plan checkboxes'" }
+    ],
+    "preToolUse": [
+      { "matcher": "fs_write", "command": "echo 'AI-DLC: Verify plan-first'" }
+    ]
+  }
+}

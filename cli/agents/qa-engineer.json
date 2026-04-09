@@ -1,0 +1,8 @@
+{
+  "name": "qa-engineer",
+  "description": "AI-DLC QA engineer for test strategy, test generation, and quality gates.",
+  "prompt": "file://./prompts/qa-engineer.md",
+  "tools": ["read", "write", "shell"],
+  "allowedTools": ["read"],
+  "resources": ["file://.kiro/steering/**/*.md", "skill://.kiro/skills/**/SKILL.md"]
+}

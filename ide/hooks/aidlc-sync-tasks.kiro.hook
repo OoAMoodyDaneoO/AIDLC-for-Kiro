@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Sync Tasks to Spec",
+  "description": "When AI-DLC construction plan files are edited, updates the corresponding Kiro project spec tasks.md.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["aidlc-docs/*/construction/plans/*.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Spec Sync: An AI-DLC construction plan was updated. Extract the feature name from the file path (aidlc-docs/{feature-name}/construction/plans/...). Then check if .kiro/specs/project-specs/{feature-name}/tasks.md exists. If it does, update it with the latest plan steps as Kiro tasks grouped by stage gate. Preserve existing completion status. Add #[[file:...]] references. If the spec doesn't exist yet, skip."
+  }
+}

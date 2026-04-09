@@ -1,0 +1,8 @@
+{
+  "name": "technical-writer",
+  "description": "AI-DLC technical writer for API docs, READMEs, ADRs, and guides.",
+  "prompt": "file://./prompts/technical-writer.md",
+  "tools": ["read", "write"],
+  "allowedTools": ["read"],
+  "resources": ["file://.kiro/steering/**/*.md", "skill://.kiro/skills/**/SKILL.md"]
+}

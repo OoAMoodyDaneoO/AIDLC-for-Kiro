@@ -1,0 +1,8 @@
+{
+  "name": "devops-engineer",
+  "description": "AI-DLC DevOps engineer for IaC, CI/CD, and deployment automation.",
+  "prompt": "file://./prompts/devops-engineer.md",
+  "tools": ["read", "write", "shell"],
+  "allowedTools": ["read"],
+  "resources": ["file://.kiro/steering/**/*.md", "skill://.kiro/skills/**/SKILL.md"]
+}

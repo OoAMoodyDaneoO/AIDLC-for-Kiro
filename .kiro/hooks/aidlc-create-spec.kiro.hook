@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Create Kiro Spec After Inception",
+  "description": "When the Workflow Planning execution plan is created (last mandatory Inception stage), triggers creation of the Kiro project spec from all accumulated AI-DLC artifacts.",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": ["aidlc-docs/*/inception/plans/execution-plan.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Spec Creation: The Workflow Planning execution plan was just created, signaling Inception is complete. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/plans/execution-plan.md). Now create the Kiro project spec at .kiro/specs/project-specs/{feature-name}/ with three files: requirement.md (summarized from inception requirements + user stories), design.md (summarized from execution plan + application design), and tasks.md (construction steps as Kiro tasks). Add #[[file:...]] references linking back to the AI-DLC artifacts. This is the ONLY time the spec should be initially created — sync hooks handle subsequent updates."
+  }
+}

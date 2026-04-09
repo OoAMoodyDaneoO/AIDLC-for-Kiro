@@ -1,0 +1,8 @@
+{
+  "name": "product-owner",
+  "description": "AI-DLC product owner for user stories, personas, and acceptance criteria.",
+  "prompt": "file://./prompts/product-owner.md",
+  "tools": ["read", "write"],
+  "allowedTools": ["read"],
+  "resources": ["file://.kiro/steering/**/*.md", "skill://.kiro/skills/**/SKILL.md"]
+}
