@@ -56,16 +56,362 @@ node aidlc-tui.js /path/to/workspace
 
 Install via Kiro Powers panel → "Add Custom Power" → Local Directory → `powers/aidlc/`
 
-## The Three Phases
+## End-to-End Workflow
 
-### 🔵 Inception — What to Build and Why
-Workspace Detection → Intent Alignment → Requirements Analysis → User Stories → Workflow Planning → Application Design → Units Generation
+The AI-DLC workflow is adaptive — stages execute or skip based on project type, complexity, user choices, and enabled extensions. The diagram below shows the full E2E flow with every decision fork.
 
-### 🟢 Construction — How to Build It
-Functional Design → NFR Requirements → NFR Design → Infrastructure Design → (ARB Gate) → (Build Path) → Code Generation → Build and Test
+### Workflow Legend
 
-### 🟡 Operations — How to Deploy and Run It
-(Permit to Operate Gate) → Release Notes → Operations
+- **ALWAYS** — stage always executes
+- **CONDITIONAL** — stage executes only when criteria are met
+- **GATE** — hard gate that blocks progress until approved
+- **MANUAL** — triggered by user on demand
+- **⑂** — decision fork
+
+---
+
+### 🔵 INCEPTION PHASE — What to Build and Why
+
+```
+┌─────────────────────────┐
+│   Workspace Detection   │  ALWAYS
+│  (scan for existing code│
+│   and aidlc-state.md)   │
+└───────────┬─────────────┘
+            │
+            ⑂ Existing code detected?
+           ╱ ╲
+         Yes   No
+         ╱       ╲
+        ▼         ▼
+  ┌──────────┐  ┌──────────────────────────┐
+  │Brownfield│  │ Greenfield               │
+  └────┬─────┘  │ ⑂ Existing prototype?    │
+       │        │  A) Code in workspace     │
+       │        │     → treat as Brownfield │
+       │        │  B) Code in separate repo │
+       │        │     → import, Brownfield  │
+       │        │  C) Prototype to review   │
+       │        │     → analyze, then cont. │
+       │        │  D) Completely new        │
+       │        │     → standard Greenfield │
+       │        └──────────┬───────────────┘
+       │                   │
+       ⑂ Reverse engineering artifacts exist?
+      ╱ ╲
+    No   Yes
+    ╱       ╲
+   ▼         ╲
+┌──────────────────┐  │
+│Reverse Engineering│  │  CONDITIONAL (brownfield only,
+│ (analyze codebase,│  │   no prior artifacts)
+│  generate docs)   │  │
+└────────┬─────────┘  │
+         │ [GATE: user approval]
+         ▼            ▼
+┌─────────────────────────┐
+│    Intent Alignment     │  ALWAYS (MANDATORY — never skip)
+│  (capture raw intent,   │
+│   clarifying questions,  │
+│   refined intent)        │
+└───────────┬─────────────┘
+            │ [GATE: user approval of refined intent]
+            │
+            ⑂ Build Path Extension enabled?
+           ╱ ╲
+         Yes   No
+         ╱       ╲
+        ▼         │
+  ┌────────────────────┐  │
+  │ Build Path Choice  │  │  ENTRY POINT 1 (upfront)
+  │ ⑂ Prototype or     │  │
+  │   Enterprise-Grade? │  │
+  └──┬─────────┬───────┘  │
+     │         │           │
+  Prototype  Enterprise    │
+     │         │           │
+     │    ┌────┘───────────┘
+     │    ▼
+     │  ┌─────────────────────────┐
+     │  │  Requirements Analysis  │  ALWAYS (depth: minimal/standard/comprehensive)
+     │  └───────────┬─────────────┘
+     │              │ [GATE: user approval]
+     │              │
+     │              ⑂ User stories needed? (multi-factor assessment)
+     │             ╱ ╲
+     │           Yes   No (pure refactoring, simple bug fix, infra-only)
+     │           ╱       ╲
+     │          ▼         │
+     │  ┌───────────────┐ │
+     │  │  User Stories  │ │  CONDITIONAL
+     │  │  Part 1: Plan  │ │
+     │  │  Part 2: Gen   │ │
+     │  └───────┬───────┘ │
+     │          │ [GATE]   │
+     │          ▼         ▼
+     │  ┌─────────────────────────┐
+     │  │   Workflow Planning     │  ALWAYS
+     │  │  (determine phases,     │
+     │  │   depth, sequence)      │
+     │  └───────────┬─────────────┘
+     │              │ [GATE: user approval]
+     │              │
+     │              ⑂ New components/services needed?
+     │             ╱ ╲
+     │           Yes   No
+     │           ╱       ╲
+     │          ▼         │
+     │  ┌────────────────┐│
+     │  │ App Design     ││  CONDITIONAL
+     │  └───────┬────────┘│
+     │          │ [GATE]   │
+     │          ▼         ▼
+     │              │
+     │              ⑂ Multiple units of work needed?
+     │             ╱ ╲
+     │           Yes   No
+     │           ╱       ╲
+     │          ▼         │
+     │  ┌────────────────┐│
+     │  │Units Generation││  CONDITIONAL
+     │  └───────┬────────┘│
+     │          │ [GATE]   │
+     │          ▼         ▼
+     │  ════════════════════
+     │  END OF INCEPTION
+     │  ════════════════════
+     │              │
+     ▼              ▼
+(see Prototype   (see Construction
+ Fast Path)       Phase below)
+```
+
+---
+
+### Prototype Fast Path (Build Path = Prototype)
+
+When the user selects Prototype at Entry Point 1, the workflow is streamlined:
+
+```
+Prototype Path
+     │
+     ▼
+  Minimal Requirements (reduced depth)
+     │
+  Skip User Stories
+     │
+  Simplified Design (skip NFRs, infrastructure)
+     │
+  Single "prototype" unit → Code Generation
+     │
+  ┌─────────────────────────┐
+  │   Prototype Review Gate  │  GATE
+  │  ⑂ What next?            │
+  │   A) Transition to       │
+  │      Enterprise-Grade    │
+  │   B) Iterate on prototype│
+  │   C) Ship as-is          │
+  └──┬──────────┬────────────┘
+     │          │
+  Transition  Continue
+     │
+     ⑂ Transition approach?
+    ╱ ╲
+  Clean   Brownfield
+  Build   from Prototype
+    │        │
+    │     Reverse Engineering
+    │     (against prototype code)
+    │        │
+    └────┬───┘
+         ▼
+  Re-enter at Requirements Analysis
+  (full enterprise depth, all stages execute)
+```
+
+---
+
+### 🟢 CONSTRUCTION PHASE — How to Build It
+
+Construction executes a per-unit loop. Each unit completes all its design + code stages before the next unit begins.
+
+```
+  ┌─────────────────────────────────────────┐
+  │         PER-UNIT LOOP                   │
+  │  (repeats for each unit of work)        │
+  │                                         │
+  │  ⑂ New data models / complex logic?     │
+  │ ╱ ╲                                     │
+  │Yes  No                                  │
+  │ ▼                                       │
+  │ Functional Design  CONDITIONAL          │
+  │ [GATE]                                  │
+  │  │                                      │
+  │  ⑂ Performance/security/scalability?    │
+  │ ╱ ╲                                     │
+  │Yes  No                                  │
+  │ ▼                                       │
+  │ NFR Requirements   CONDITIONAL          │
+  │ [GATE]                                  │
+  │  │                                      │
+  │  ⑂ NFR Requirements executed?           │
+  │ ╱ ╲                                     │
+  │Yes  No                                  │
+  │ ▼                                       │
+  │ NFR Design         CONDITIONAL          │
+  │ [GATE]                                  │
+  │  │                                      │
+  │  ⑂ Infrastructure changes needed?       │
+  │ ╱ ╲                                     │
+  │Yes  No                                  │
+  │ ▼                                       │
+  │ Infrastructure Design  CONDITIONAL      │
+  │ [GATE]                                  │
+  │  │                                      │
+  │  ▼                                      │
+  │ Code Generation    ALWAYS (per-unit)    │
+  │  Part 1: Planning  [GATE]               │
+  │  Part 2: Generation [GATE]              │
+  │                                         │
+  └─────────────┬───────────────────────────┘
+                │ (after ALL units complete)
+                │
+```
+
+#### Governance Gates (between design completion and Code Generation)
+
+After all Construction design stages complete for all units, governance gates fire before Code Generation begins:
+
+```
+  All units designed
+        │
+        ⑂ ARB Extension enabled?
+       ╱ ╲
+     Yes   No
+     ╱       ╲
+    ▼         │
+┌──────────────┐│
+│ ARB Artifact ││  HARD GATE — blocks Code Gen until approved
+│ Generation   ││
+└──────┬───────┘│
+       │ [GATE]  │
+       ▼        ▼
+        │
+        ⑂ AI Compliance Extension enabled
+       ╱  AND AI/ML capabilities detected?
+     Yes   No
+     ╱       ╲
+    ▼         │
+┌──────────────┐│
+│AI Compliance ││  HARD GATE — blocks Code Gen until approved
+│   Review     ││
+└──────┬───────┘│
+       │ [GATE]  │
+       ▼        ▼
+        │
+        ⑂ Build Path Extension enabled?
+       ╱ ╲  (Entry Point 2 — second chance)
+     Yes   No
+     ╱       ╲
+    ▼         │
+┌──────────────────┐│
+│ Build Path Choice ││  User chose Enterprise at EP1?
+│ ⑂ Prototype now   ││  Offer prototype option again
+│   or continue?     ││
+└──┬────────┬───────┘│
+   │        │         │
+Prototype  Continue   │
+   │        │         │
+   │   ┌────┘─────────┘
+   │   ▼
+   │  Code Generation (all units)
+   │        │
+   │        ▼
+   │  Build and Test  ALWAYS
+   │  [GATE: user approval]
+   │        │
+   ▼        ▼
+(Prototype  (see Operations)
+ Review Gate)
+```
+
+#### Manual Governance Triggers (any time during Construction)
+
+```
+  ┌──────────────────┐   ┌──────────────────┐
+  │  Security Review  │   │  Design Review   │
+  │  (OWASP Top 10,   │   │  (drift detection│
+  │   vuln assessment) │   │   vs design docs)│
+  │  MANUAL trigger    │   │  MANUAL trigger  │
+  └──────────────────┘   └──────────────────┘
+```
+
+---
+
+### 🟡 OPERATIONS PHASE — How to Deploy and Run It
+
+```
+  Build and Test complete
+        │
+        ⑂ PTO Extension enabled?
+       ╱ ╲
+     Yes   No
+     ╱       ╲
+    ▼         │
+┌──────────────┐│
+│ Permit to    ││  HARD GATE — blocks production deployment
+│ Operate (PTO)││
+└──────┬───────┘│
+       │ [GATE]  │
+       ▼        ▼
+        │
+  Operations (placeholder for future:
+    deployment, monitoring, incident response)
+```
+
+---
+
+### Decision Fork Summary
+
+| Fork | Condition | Path A | Path B |
+|---|---|---|---|
+| **Brownfield vs Greenfield** | Existing code detected? | Brownfield → Reverse Engineering | Greenfield → Intent Alignment |
+| **Existing Prototype** | Greenfield + existing code? | Analyze prototype → Brownfield | Completely new → standard flow |
+| **Reverse Engineering** | Brownfield + no prior artifacts? | Execute RE | Skip RE |
+| **Build Path (EP1)** | Extension enabled + Intent approved? | Prototype Fast Path | Enterprise-Grade |
+| **User Stories** | Multi-factor assessment | Execute stories | Skip (pure refactoring, etc.) |
+| **Application Design** | New components/services? | Execute design | Skip |
+| **Units Generation** | Multiple units needed? | Decompose into units | Single unit |
+| **Functional Design** | New data models/complex logic? | Execute per unit | Skip |
+| **NFR Requirements** | Performance/security/scalability? | Execute per unit | Skip |
+| **NFR Design** | NFR Requirements executed? | Execute per unit | Skip |
+| **Infrastructure Design** | Infrastructure changes needed? | Execute per unit | Skip |
+| **ARB Gate** | Extension enabled? | HARD GATE before Code Gen | Skip |
+| **AI Compliance** | Extension enabled + AI detected? | HARD GATE before Code Gen | Skip |
+| **Build Path (EP2)** | Extension enabled + chose Enterprise at EP1? | Offer prototype option again | Proceed to Code Gen |
+| **Prototype Transition** | Prototype complete? | Clean Build or Brownfield transition | Continue iterating |
+| **Security Review** | Manual trigger | OWASP assessment | N/A |
+| **Design Review** | Manual trigger | Drift detection | N/A |
+| **Test Evidence RCA** | Extension enabled + test failure? | RCA required before fix | Standard test flow |
+| **PTO Gate** | Extension enabled? | HARD GATE before deployment | Skip |
+
+---
+
+### PM Tool Sync Points
+
+When PM tool integration is enabled (Jira, ADO, Linear, GitHub Issues), artifacts sync at these points:
+
+| Approval Gate | What Syncs |
+|---|---|
+| Requirements Analysis approved | Epic created, FRs/NFRs as Features/Stories |
+| User Stories approved | User Stories as work items linked to FRs |
+| Construction design approved | Sub-tasks for code generation steps |
+| ARB approved (if enabled) | ARB document attached to Epic |
+| Code Generation task complete | Work item status → Done |
+| Test failure (if Test Evidence enabled) | Bug/Defect created with RCA |
+| Design Review (if enabled) | Critical/High drift items as Issues |
+| Build & Test complete | Consolidated test evidence to Epic |
+| PTO approved (if enabled) | PTO attached to Epic |
 
 ## Enterprise Governance (Opt-In)
 
