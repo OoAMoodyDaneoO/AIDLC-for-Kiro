@@ -1,21 +1,22 @@
-# AI-DLC Scaffolding for Kiro IDE and CLI
+# AI-DLC Framework for Kiro IDE and CLI
 
-A production-ready scaffolding that implements the [AI-DLC (AI-Driven Development Lifecycle)](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/) methodology natively in [Kiro](https://kiro.dev), supporting both the IDE and CLI.
-
-Clone, run setup for your platform, overlay your business context, and start building.
+Enterprise-grade AI-assisted software development lifecycle for [Kiro](https://kiro.dev). Guides you from intent through design, code generation, testing, and production deployment — with governance checkpoints, PM tool integration, and full audit trails.
 
 ## What's Inside
 
-| Layer | Count | Purpose |
+| Component | Count | Purpose |
 |---|---|---|
-| Steering files | 4 | Always-on methodology rules and team context |
-| Hooks | 7 | Enforcement, audit logging, bidirectional spec sync (IDE) |
+| Steering files | 8 | Methodology rules, governance, PM integration, conflict detection |
+| Hooks | 21 | Enforcement, audit, spec sync, governance gates, PM push/pull |
 | Custom agents | 12 | Specialist subagents for every AI-DLC role |
-| Skills | 9 | On-demand expertise (agentskills.io standard) |
-| Rule details | 20+ | Official stage rules from [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows) |
-| Extensions | 3 | Security baseline, property-based testing, blank template |
+| Skills | 9 | On-demand expertise (DDD, security, testing, etc.) |
+| Rule details | 20+ | Stage rules from [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows) |
+| Governance extensions | 8 | ARB, PTO, Design Review, Test Evidence, Build Path, PM, Security, AI Compliance |
+| IDE extension | 1 | Visual dashboard with sidebar, progress tracking, governance controls |
+| CLI TUI dashboard | 1 | Interactive terminal UI for CLI users |
+| Kiro Power | 1 | Context-efficient user guide with 6 steering files |
 
-## Platform Setup
+## Quick Start
 
 ### Kiro IDE
 
@@ -25,7 +26,7 @@ cd AIDLC-for-Kiro-IDE-and-CLI
 ./setup-ide.sh
 ```
 
-Copies IDE-format agents (`.md`), hooks (`.kiro.hook`), and spec templates into `.kiro/`. Open in Kiro IDE and type: `Using AI-DLC, [your intent]`
+Then open in Kiro and say: **"Using AI-DLC, I want to build [describe your feature]"**
 
 ### Kiro CLI
 
@@ -36,134 +37,88 @@ cd AIDLC-for-Kiro-IDE-and-CLI
 kiro-cli --agent aidlc-orchestrator
 ```
 
-Copies CLI-format agents (`.json`) with prompt files into `.kiro/agents/`.
+### Visual Dashboard (IDE Extension)
 
-### Shared vs Platform-Specific
+```bash
+cd extensions && ./build.sh
+# In Kiro: Cmd+Shift+P → "Install from VSIX" → extensions/out/kiro-aidlc-plugin.vsix
+# Reload window
+```
 
-| Component | Shared | IDE | CLI |
-|---|---|---|---|
-| Steering files | ✅ | | |
-| Skills | ✅ | | |
-| Rule details + extensions | ✅ | | |
-| aidlc-docs/ artifacts | ✅ | | |
-| Agents (.md) | | ✅ | |
-| Agents (.json) | | | ✅ |
-| Hooks (.kiro.hook files) | | ✅ | |
-| Hooks (in agent JSON) | | | ✅ |
-| Specs (requirement/design/tasks) | | ✅ | |
+### Visual Dashboard (CLI TUI)
 
-CLI doesn't support native specs — spec integration is IDE-only. On CLI, `aidlc-docs/` artifacts are the primary documentation.
+```bash
+cd cli/dashboard && npm install
+node aidlc-tui.js /path/to/workspace
+```
 
-## Agents
+### Kiro Power
 
-| Agent | Role |
+Install via Kiro Powers panel → "Add Custom Power" → Local Directory → `powers/aidlc/`
+
+## The Three Phases
+
+### 🔵 Inception — What to Build and Why
+Workspace Detection → Intent Alignment → Requirements Analysis → User Stories → Workflow Planning → Application Design → Units Generation
+
+### 🟢 Construction — How to Build It
+Functional Design → NFR Requirements → NFR Design → Infrastructure Design → (ARB Gate) → (Build Path) → Code Generation → Build and Test
+
+### 🟡 Operations — How to Deploy and Run It
+(Permit to Operate Gate) → Release Notes → Operations
+
+## Enterprise Governance (Opt-In)
+
+| Extension | Gate Point | What It Does |
+|---|---|---|
+| **ARB Artifact** | Before Code Gen | Architecture Review Board submission |
+| **Permit to Operate** | After Build & Test | Production deployment approval |
+| **Design Review** | Manual trigger | Drift detection with remediation |
+| **Test Evidence & RCA** | During Build & Test | Formal test docs with root cause analysis |
+| **Build Path Selection** | Before Code Gen | Prototype-first vs enterprise-grade |
+| **PM Tool Integration** | Every approval gate | Push to Jira/ADO/Linear/GitHub Issues |
+| **Security Review** | Manual trigger | OWASP Top 10 assessment |
+| **AI Compliance** | Before Code Gen | Responsible AI review |
+
+## IDE Extension
+
+- Sidebar: Phases, Features, Governance views
+- Dashboard: Progress bars, phase cards, governance actions, activity timeline
+- Feature switching, new feature launcher, artifact viewer, search, notifications
+
+## CLI TUI Dashboard
+
+Interactive terminal UI — progress gauge, phases table, governance panel, features list, activity log. Keys: `q` quit, `r` refresh, `1-9` switch features, `Tab` commands.
+
+## Hooks (21)
+
+Enforcement (`plan-first`, `test-rca`), audit (`log-prompt`, `mark-complete`), spec sync (`sync-requirements`, `sync-design`, `sync-tasks`, `sync-task-complete`, `create-spec`), vibe sync, governance gates (`arb-gate`, `build-path`, `pto-gate`), PM push (`requirements`, `stories`, `test-evidence`), manual triggers (`pm-pull`, `design-review`, `release-notes`, `cost-estimate`, `retrospective`).
+
+## Agents (12)
+
+aidlc-orchestrator, requirements-analyst, product-owner, architect, frontend-developer, backend-developer, security-engineer, devops-engineer, sre-engineer, qa-engineer, database-engineer, technical-writer.
+
+## Customizing for Your Enterprise
+
+1. Edit `.kiro/steering/aidlc-steering files/team-context.md` for your team's standards
+2. Add business rules to `.kiro/steering/enterprise steering/`
+3. Add custom extensions to `.kiro/aws-aidlc-rule-details/extensions/`
+4. Configure PM tool MCP server in `.kiro/settings/mcp.json`
+5. Customize `[Enterprise: ...]` placeholders in ARB and PTO templates
+
+## Key Commands
+
+| Command | What It Does |
 |---|---|
-| aidlc-orchestrator | Workflow coordination and delegation |
-| requirements-analyst | Requirements gathering and intent analysis |
-| product-owner | User stories, personas, acceptance criteria |
-| architect | Application design, DDD, NFR patterns, ADRs |
-| frontend-developer | HTML, CSS, JS, React, accessibility |
-| backend-developer | APIs, business logic, server-side code |
-| security-engineer | OWASP, vulnerability assessment, secure coding |
-| devops-engineer | IaC, CI/CD, containerization, deployment |
-| sre-engineer | Monitoring, observability, incident response |
-| qa-engineer | Test strategy, test generation, quality gates |
-| database-engineer | Schema design, migrations, query optimization |
-| technical-writer | API docs, READMEs, ADRs, onboarding guides |
-
-## Skills
-
-9 on-demand packages: aidlc-workflow, ddd-modeling, accessibility-audit, rest-api-design, adr-writing, test-strategy, security-review, observability-setup, terraform-patterns
-
-## Multi-Feature Support
-
-Each feature gets its own artifact tree and Kiro spec (IDE only):
-
-```
-aidlc-docs/{feature-name}/inception/    requirements, plans, stories
-aidlc-docs/{feature-name}/construction/ code plans, ADRs, build-and-test
-.kiro/specs/project-specs/{feature}/    requirement.md, design.md, tasks.md (IDE)
-```
-
-## Customizing for Your Team
-
-1. Edit `.kiro/steering/team-context.md` — coding standards, architecture, security
-2. Add extensions in `.kiro/aws-aidlc-rule-details/extensions/`
-3. Add skills in `.kiro/skills/`
-
-## Enterprise Onboarding Prompts
-
-After cloning, use these prompts in Kiro to wire up your enterprise context:
-
-**1. Team Context Setup**
-```
-Review .kiro/steering/team-context.md and help me fill it in.
-Our team builds [describe domain]. We use [tech stack].
-Ask me about our coding standards, architecture, security, and naming conventions.
-```
-
-**2. Import Existing Standards**
-```
-I have existing team standards to import as steering files.
-Help me create steering files in .kiro/steering/ from:
-[paste or reference your standards docs]
-```
-
-**3. Configure MCP Servers**
-```
-Help me set up MCP servers for our tools. We use:
-- [Jira/ADO/Linear] for project management
-- [Confluence/Notion] for documentation
-- [specific databases, APIs, or services]
-Create the mcp.json in .kiro/settings/
-```
-
-**4. Add Custom Skills**
-```
-Create a skill for [describe workflow — e.g., our deployment process,
-code review checklist, data pipeline patterns].
-Put it in .kiro/skills/ following agentskills.io format.
-```
-
-**5. Create Custom Agents**
-```
-I need a specialist agent for [describe role — e.g., compliance reviewer,
-data engineer who knows our Snowflake setup].
-Create an agent in .kiro/agents/ with the right tools and prompt.
-```
-
-**6. Add Custom Extensions**
-```
-Our org requires [describe compliance/security/testing rules].
-Create a custom extension in .kiro/aws-aidlc-rule-details/extensions/
-with opt-in questions and blocking rules.
-```
-
-**7. Import Existing Architecture**
-```
-We have an existing system. Here's our architecture: [paste or reference].
-Create steering files that capture our patterns and conventions
-so AI-DLC understands our brownfield context.
-```
-
-## Architecture
-
-```
-.kiro/                              Shared across IDE and CLI
-  steering/                         Always-on methodology rules
-  skills/                           On-demand expertise packages
-  aws-aidlc-rule-details/           Official AI-DLC stage rules + extensions
-
-ide/                                IDE-specific (setup-ide.sh)
-  agents/*.md                       Markdown agents with YAML frontmatter
-  hooks/*.kiro.hook                 Standalone hook files
-  specs/                            Spec templates
-
-cli/                                CLI-specific (setup-cli.sh)
-  agents/*.json                     JSON agent configs
-
-aidlc-docs/                         AI-DLC artifacts (created at runtime)
-```
+| `Using AI-DLC, I want to build...` | Start new feature |
+| `dashboard` / `show status` | View progress |
+| `run design review` | Trigger design review |
+| `generate arb` / `generate pto` | Generate governance artifacts |
+| `generate release notes` | Auto-generate release notes |
+| `estimate costs` | Generate cost estimates |
+| `run retrospective` | Capture phase retrospective |
+| `pull pm changes` | Sync from PM tool |
+| `check for conflicts` | Audit steering for conflicts |
 
 ## References
 
@@ -171,13 +126,6 @@ aidlc-docs/                         AI-DLC artifacts (created at runtime)
 - [AI-DLC Whitepaper](https://prod.d13rzhkk8cj2z0.amplifyapp.com/)
 - [AI-DLC Workflows Repo](https://github.com/awslabs/aidlc-workflows)
 - [Kiro Documentation](https://kiro.dev/docs/)
-- [Agent Skills Standard](https://agentskills.io/specification)
-
-## Future Enhancements
-
-- Visualization dashboard: A web UI that reads `aidlc-docs/` and renders workflow progress
-- Additional MCP integrations: Confluence, Notion, Slack notifications
-- AI-DLC Power: Package as a Kiro Power for one-click installation
 
 ## License
 

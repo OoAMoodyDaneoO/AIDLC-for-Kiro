@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: AI Compliance Review",
+  "description": "Manually triggered on-demand AI compliance review. Assesses AI/ML components against responsible AI principles, model governance, bias/fairness, explainability, regulatory compliance (EU AI Act), and customer-provided AI standards.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC AI Compliance Review: The user has triggered an on-demand AI compliance review. Find the active feature from aidlc-docs/*/aidlc-state.md. Check if the AI Compliance extension is enabled. If enabled, perform a comprehensive AI compliance assessment:\n\n1. Load AI compliance rules from .kiro/aws-aidlc-rule-details/extensions/governance/ai-compliance/ai-compliance.md\n2. Detect AI capabilities in the solution (scan requirements, design artifacts, and code for AI/ML indicators)\n3. If no AI capabilities detected, inform the user and skip\n4. Assess against built-in standards: responsible AI principles, model governance, data privacy, bias/fairness, explainability, regulatory compliance (EU AI Act risk classification), security/robustness, monitoring/operations\n5. If custom AI governance standards are configured in aidlc-state.md, load and assess against those too\n6. Generate a structured compliance report with per-domain scores, severity ratings, and remediation plans\n7. Store the report at aidlc-docs/{feature-name}/construction/adrs/ai-compliance-review-{YYYY-MM-DD}.md\n8. If PM tool sync is enabled, push Critical/High findings as issues\n9. Log the review in audit.md\n10. Present a summary of findings to the user in chat with overall compliance score\n\nIf the AI Compliance extension is not enabled, inform the user and ask if they'd like to enable it."
+  }
+}

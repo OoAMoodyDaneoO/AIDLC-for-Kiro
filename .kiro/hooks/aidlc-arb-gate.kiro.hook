@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: ARB Artifact Gate",
+  "description": "When a code generation plan is about to be created, checks if the ARB extension is enabled and whether the ARB artifact has been generated and approved. If not, blocks code generation until the ARB artifact is completed.",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": ["aidlc-docs/*/construction/plans/*-code-generation-plan.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC ARB Gate: A code generation plan is being created. Check aidlc-state.md for the active feature and whether the ARB Artifact extension is enabled. If enabled:\n\n1. Check if the ARB artifact exists at aidlc-docs/{feature-name}/construction/adrs/arb-submission.md\n2. If it does NOT exist: STOP and generate the ARB artifact first using the template from .kiro/aws-aidlc-rule-details/extensions/governance/arb-artifact/arb-template.md. Auto-populate sections from all available design artifacts. Present to the user for review and approval before allowing code generation to proceed.\n3. If it DOES exist: check audit.md for user approval. If not approved, present it for approval. If approved, allow code generation to proceed.\n4. If PM tool sync is enabled, attach the ARB document link to the Epic.\n5. Log the gate check in audit.md.\n\nIf ARB extension is not enabled, allow code generation to proceed without intervention."
+  }
+}

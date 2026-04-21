@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Permit to Operate Gate",
+  "description": "After Build & Test completes, checks if the PTO extension is enabled and generates the Permit to Operate artifact before allowing progression to Operations. Hard gate before production deployment.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["aidlc-docs/*/construction/build-and-test/build-and-test-summary.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC PTO Gate: The Build & Test summary was just updated. Check aidlc-state.md for the active feature and whether the Permit to Operate (PTO) extension is enabled. If enabled:\n\n1. Check if Build & Test is marked complete in aidlc-state.md\n2. If complete, check if a PTO artifact already exists at aidlc-docs/{feature-name}/operations/permit-to-operate.md\n3. If it does NOT exist: generate the PTO artifact. Auto-populate from: refined-intent.md, NFR design, infrastructure design, security findings, test evidence summary, design review reports, and ARB artifact. Leave enterprise sections as placeholders.\n4. Present the PTO for review — HARD GATE before Operations\n5. If PM tool sync enabled, attach to Epic and create status item\n6. Log in audit.md\n\nIf PTO extension is not enabled, skip silently."
+  }
+}

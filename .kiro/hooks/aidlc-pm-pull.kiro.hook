@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Pull PM Tool Changes",
+  "description": "Manually triggered hook to query the configured PM tool (Jira/ADO/Linear/GitHub Issues) for any external changes to linked work items and sync them back to AI-DLC artifacts.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC PM Pull Sync: The user has triggered a PM tool sync pull. Check aidlc-state.md for PM Tool Configuration. If sync is enabled:\n\n1. Identify the configured PM tool (Jira/ADO/Linear/GitHub Issues)\n2. Use the appropriate MCP server to query for changes to all linked work items (epics, features, stories, tasks, bugs)\n3. Compare PM tool state against AI-DLC artifacts — look for: status changes, new comments, reassignments, scope changes, new linked items, priority changes\n4. Present a summary of external changes found\n5. For each change, ask the user whether to incorporate it into AI-DLC artifacts\n6. If user approves incorporation, update the relevant AI-DLC artifacts and Kiro specs\n7. Log the sync results in audit.md with timestamp\n\nIf PM tool sync is not enabled, inform the user that no PM tool is configured and suggest running the PM tool setup question."
+  }
+}

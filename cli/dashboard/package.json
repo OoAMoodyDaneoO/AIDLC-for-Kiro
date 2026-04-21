@@ -1,0 +1,17 @@
+{
+  "name": "aidlc-tui",
+  "version": "0.1.0",
+  "description": "AI-DLC Terminal Dashboard — interactive TUI control plane for CLI users",
+  "main": "aidlc-tui.js",
+  "bin": {
+    "aidlc-tui": "./aidlc-tui.js"
+  },
+  "scripts": {
+    "start": "node aidlc-tui.js"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.11.0"
+  },
+  "license": "MIT"
+}

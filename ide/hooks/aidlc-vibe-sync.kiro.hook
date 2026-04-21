@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Vibe Sync & Prototype Feedback",
+  "description": "After any write operation completes, checks if AI-DLC artifacts and Kiro specs are in sync, and performs prototype vibe coding gap analysis when application code is written during a prototype session.",
+  "version": "1",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Vibe Sync: You just wrote to a file. Perform TWO checks:\n\n**Check 1 — Artifact/Spec Sync**: If this change affects AI-DLC artifacts or Kiro specs, ensure BOTH are in sync. If you updated an AI-DLC artifact (aidlc-docs/*/), check if a corresponding Kiro spec exists (.kiro/specs/project-specs/*/). If so, update the relevant spec file. Conversely, if you updated a Kiro spec, update the corresponding AI-DLC artifact. If no spec exists yet, skip.\n\n**Check 2 — Prototype Vibe Feedback**: If the file written is APPLICATION CODE (not in aidlc-docs/ or .kiro/), check aidlc-state.md for the active feature. If the Build Path extension is enabled AND Prototype Status is 'In Progress' or 'Complete', perform a gap analysis:\n1. Compare the code change against documented requirements (aidlc-docs/{feature}/inception/requirements/), user stories (aidlc-docs/{feature}/inception/user-stories/), and unit plans (aidlc-docs/{feature}/construction/plans/)\n2. Identify: new functionality not in any FR/NFR, new user-facing behavior not in any story, changes that contradict existing requirements, scope expansion beyond unit boundaries\n3. Classify gaps as: New Requirement, Modified Requirement, New User Story, Modified User Story, New Unit of Work, or Design Deviation\n4. If gaps are found, present a summary: '🔄 Prototype Vibe Feedback — [N] gaps detected between vibe-coded changes and documented artifacts. [list gaps]. Would you like me to update requirements/stories/plans to reflect these changes?'\n5. On user approval: append new items with [VIBE-ADDED] tag, update existing items, log in audit.md, and push to PM tool if sync enabled\n6. If no gaps (change is within documented scope), skip silently\n7. Minor cosmetic changes (naming, formatting) — skip silently"
+  }
+}

@@ -1,8 +1,8 @@
 {
   "enabled": true,
   "name": "AI-DLC: Vibe Mode Sync",
-  "description": "After each user prompt, reminds the agent that any changes made during vibe interactions must be reflected in BOTH the AI-DLC artifacts (aidlc-docs/) AND the corresponding Kiro spec (project-specs/). Ensures bidirectional consistency.",
-  "version": "1",
+  "description": "After each write, ensures AI-DLC artifacts and Kiro specs stay in sync. Also performs prototype vibe feedback gap analysis when the Build Path extension is enabled and a prototype is active — detecting new/modified requirements, user stories, and design deviations introduced through vibe coding.",
+  "version": "2",
   "when": {
     "type": "postToolUse",
     "toolTypes": [
@@ -11,6 +11,6 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "AI-DLC Vibe Sync: You just wrote to a file. If this change affects AI-DLC artifacts or Kiro specs, ensure BOTH are in sync. Specifically: if you updated an AI-DLC artifact (aidlc-docs/*/), check if a corresponding Kiro spec exists (.kiro/specs/project-specs/*/). If so, update the relevant spec file (requirement.md, design.md, or tasks.md) to reflect the change. Conversely, if you updated a Kiro spec file, update the corresponding AI-DLC artifact. Extract the feature name from the file path to match them. If no spec exists yet (Construction design not complete), skip the spec sync."
+    "prompt": "AI-DLC Vibe Sync: You just wrote to a file. Perform TWO checks:\n\n**Check 1 — Artifact/Spec Sync**: If this change affects AI-DLC artifacts or Kiro specs, ensure BOTH are in sync. If you updated an AI-DLC artifact (aidlc-docs/*/), check if a corresponding Kiro spec exists (.kiro/specs/project-specs/*/). If so, update the relevant spec file. Conversely, if you updated a Kiro spec, update the corresponding AI-DLC artifact. If no spec exists yet, skip.\n\n**Check 2 — Prototype Vibe Feedback**: If the file written is APPLICATION CODE (not in aidlc-docs/ or .kiro/), check aidlc-state.md for the active feature. If the Build Path extension is enabled AND Prototype Status is 'In Progress' or 'Complete', perform a gap analysis:\n1. Compare the code change against documented requirements (aidlc-docs/{feature}/inception/requirements/), user stories (aidlc-docs/{feature}/inception/user-stories/), and unit plans (aidlc-docs/{feature}/construction/plans/)\n2. Identify: new functionality not in any FR/NFR, new user-facing behavior not in any story, changes that contradict existing requirements, scope expansion beyond unit boundaries\n3. Classify gaps as: New Requirement, Modified Requirement, New User Story, Modified User Story, New Unit of Work, or Design Deviation\n4. If gaps are found, present a summary: '🔄 Prototype Vibe Feedback — [N] gaps detected between vibe-coded changes and documented artifacts. [list gaps]. Would you like me to update requirements/stories/plans to reflect these changes?'\n5. On user approval: append new items with [VIBE-ADDED] tag, update existing items, log in audit.md, and push to PM tool if sync enabled\n6. If no gaps (change is within documented scope), skip silently\n7. Minor cosmetic changes (naming, formatting) — skip silently"
   }
 }

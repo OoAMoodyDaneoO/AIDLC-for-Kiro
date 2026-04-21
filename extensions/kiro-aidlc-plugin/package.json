@@ -1,0 +1,151 @@
+{
+  "name": "kiro-aidlc-plugin",
+  "displayName": "AI-DLC Workflow",
+  "publisher": "aidlc",
+  "description": "Visual dashboard for the AI-DLC software development lifecycle — track phases, features, governance, and progress in real time",
+  "version": "0.1.0",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": ["workspaceContains:aidlc-docs/*/aidlc-state.md"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [{
+        "id": "aidlc-workflow",
+        "title": "AI-DLC Workflow",
+        "icon": "media/icon.svg"
+      }]
+    },
+    "views": {
+      "aidlc-workflow": [
+        { "id": "aidlcPhases", "name": "Phases" },
+        { "id": "aidlcFeatures", "name": "Features" },
+        { "id": "aidlcGovernance", "name": "Governance" },
+        { "id": "aidlcConfig", "name": "Configuration", "visibility": "visible" },
+        { "id": "aidlcArtifacts", "name": "Generated Artifacts", "visibility": "visible" }
+      ]
+    },
+    "commands": [
+      { "command": "aidlc.openDashboard", "title": "Open AI-DLC Dashboard", "icon": "$(dashboard)" },
+      { "command": "aidlc.refresh", "title": "Refresh AI-DLC", "icon": "$(refresh)" },
+      { "command": "aidlc.runStage", "title": "Run Stage in Kiro Chat", "icon": "$(play)" },
+      { "command": "aidlc.openArtifact", "title": "Open Artifact" },
+      { "command": "aidlc.triggerDesignReview", "title": "Trigger Design Review", "icon": "$(search)" },
+      { "command": "aidlc.triggerSecurityReview", "title": "Trigger Security Review", "icon": "$(shield)" },
+      { "command": "aidlc.triggerAiCompliance", "title": "Trigger AI Compliance Review", "icon": "$(hubot)" },
+      { "command": "aidlc.triggerPrototypeTransition", "title": "Transition Prototype to Enterprise", "icon": "$(rocket)" },
+      { "command": "aidlc.triggerPmPull", "title": "Pull PM Tool Changes", "icon": "$(cloud-download)" },
+      { "command": "aidlc.openGovernanceDashboard", "title": "Open Governance Dashboard", "icon": "$(dashboard)" },
+      { "command": "aidlc.switchFeature", "title": "AI-DLC: Switch Feature", "icon": "$(arrow-swap)" },
+      { "command": "aidlc.selectFeature", "title": "Switch to Feature" },
+      { "command": "aidlc.switchFeatureByName", "title": "Switch Feature by Name" },
+      { "command": "aidlc.newFeature", "title": "AI-DLC: New Feature", "icon": "$(add)" },
+      { "command": "aidlc.skipStage", "title": "AI-DLC: Skip Stage" },
+      { "command": "aidlc.searchArtifacts", "title": "AI-DLC: Search Artifacts", "icon": "$(search)" },
+      { "command": "aidlc.exportReport", "title": "AI-DLC: Export Feature Report", "icon": "$(export)" },
+      { "command": "aidlc.openConfigFile", "title": "Open File" },
+      { "command": "aidlc.addConfigFile", "title": "Add File", "icon": "$(add)" },
+      { "command": "aidlc.deleteConfigFile", "title": "Delete File", "icon": "$(trash)" },
+      { "command": "aidlc.refreshConfig", "title": "Refresh", "icon": "$(refresh)" },
+      { "command": "aidlc.refreshArtifacts", "title": "Refresh", "icon": "$(refresh)" },
+      { "command": "aidlc.archiveFeature", "title": "AI-DLC: Archive Feature" },
+      { "command": "aidlc.cloneFeature", "title": "AI-DLC: Clone Feature" },
+      { "command": "aidlc.compareFeatures", "title": "AI-DLC: Compare Features" },
+      { "command": "aidlc.copyArtifactPath", "title": "Copy Artifact Path" }
+    ],
+    "keybindings": [
+      { "command": "aidlc.openDashboard", "key": "cmd+shift+d", "mac": "cmd+shift+d", "when": "workspaceFolderCount > 0" },
+      { "command": "aidlc.newFeature", "key": "cmd+shift+n", "mac": "cmd+shift+n", "when": "workspaceFolderCount > 0" },
+      { "command": "aidlc.searchArtifacts", "key": "cmd+shift+f", "mac": "cmd+shift+f", "when": "activeWebviewPanelId == aidlcDashboard" },
+      { "command": "aidlc.switchFeature", "key": "cmd+shift+s", "mac": "cmd+shift+s", "when": "workspaceFolderCount > 0" }
+    ],
+    "menus": {
+      "view/title": [
+        { "command": "aidlc.openDashboard", "when": "view == aidlcPhases", "group": "navigation" },
+        { "command": "aidlc.refresh", "when": "view == aidlcPhases || view == aidlcFeatures || view == aidlcGovernance", "group": "navigation" },
+        { "command": "aidlc.refreshConfig", "when": "view == aidlcConfig", "group": "navigation" },
+        { "command": "aidlc.refreshArtifacts", "when": "view == aidlcArtifacts", "group": "navigation" },
+        { "command": "aidlc.openGovernanceDashboard", "when": "view == aidlcGovernance", "group": "navigation" },
+        { "command": "aidlc.switchFeature", "when": "view == aidlcFeatures", "group": "navigation" },
+        { "command": "aidlc.newFeature", "when": "view == aidlcFeatures", "group": "navigation" }
+      ],
+      "view/item/context": [
+        { "command": "aidlc.runStage", "when": "viewItem == stage", "group": "inline" },
+        { "command": "aidlc.addConfigFile", "when": "viewItem == configSubfolder", "group": "inline" },
+        { "command": "aidlc.deleteConfigFile", "when": "viewItem == configFile", "group": "inline" }
+      ]
+    },
+    "configuration": {
+      "title": "AI-DLC Workflow",
+      "properties": {
+        "aidlc.autoOpenDashboard": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically open the AI-DLC dashboard when a workspace with features is detected"
+        },
+        "aidlc.defaultView": {
+          "type": "string",
+          "enum": ["landing", "feature"],
+          "default": "landing",
+          "description": "Default view when opening the dashboard"
+        },
+        "aidlc.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show toast notifications for stage completions and artifact updates"
+        },
+        "aidlc.timelineEntries": {
+          "type": "number",
+          "default": 10,
+          "minimum": 5,
+          "maximum": 50,
+          "description": "Number of recent activity entries to show in the timeline"
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "aidlc.gettingStarted",
+        "title": "Getting Started with AI-DLC",
+        "description": "Learn how to use the AI-DLC workflow to build software with structured lifecycle management",
+        "steps": [
+          {
+            "id": "openDashboard",
+            "title": "Open the Dashboard",
+            "description": "The AI-DLC dashboard is your command center. Open it to see all your features at a glance.\n\n[Open Dashboard](command:aidlc.openDashboard)",
+            "media": { "markdown": "The dashboard shows a portfolio view of all your features with progress tracking, governance controls, and artifact management." }
+          },
+          {
+            "id": "createFeature",
+            "title": "Create Your First Feature",
+            "description": "Start a new feature to begin the AI-DLC lifecycle.\n\n[New Feature](command:aidlc.newFeature)",
+            "media": { "markdown": "Each feature gets its own artifact tree, audit trail, and progress tracking." }
+          },
+          {
+            "id": "exploreWorkflow",
+            "title": "Explore the Workflow",
+            "description": "Click into a feature to see its phases — Inception, Construction, Operations — each with expandable sub-stages.",
+            "media": { "markdown": "Stages show dependencies, progress bars, linked artifacts, and action buttons." }
+          },
+          {
+            "id": "configureGovernance",
+            "title": "Set Up Governance",
+            "description": "Configure PM tool integration, enable design reviews, and set up test evidence governance from the dashboard.",
+            "media": { "markdown": "Enterprise governance features include ARB artifact generation, drift detection, and RCA-gated test modifications." }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}

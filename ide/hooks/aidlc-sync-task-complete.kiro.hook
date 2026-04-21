@@ -1,13 +1,13 @@
 {
   "enabled": true,
   "name": "AI-DLC: Sync Task Completion to Plan",
-  "description": "After a spec task is completed in Kiro, syncs the completion status back to the corresponding AI-DLC construction plan checkboxes for bidirectional traceability.",
-  "version": "1",
+  "description": "After a spec task is completed in Kiro, syncs the completion status back to the corresponding AI-DLC construction plan. Prototype-aware: handles prototype task completions and triggers prototype review gate when all prototype tasks are done.",
+  "version": "2",
   "when": {
     "type": "postTaskExecution"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "AI-DLC Bidirectional Sync: A spec task was just completed. Check which project spec task was marked done (look in .kiro/specs/project-specs/*/tasks.md for recently completed tasks). Then find the corresponding AI-DLC construction plan (aidlc-docs/*/construction/plans/*.md) and mark the matching step as [x] there too. Also update the feature's aidlc-state.md if applicable. This keeps both the Kiro spec and AI-DLC plan in sync."
+    "prompt": "AI-DLC Bidirectional Sync: A spec task was just completed. Check which project spec task was marked done (look in .kiro/specs/project-specs/*/tasks.md for recently completed tasks). Then find the corresponding AI-DLC construction plan (aidlc-docs/*/construction/plans/*.md) and mark the matching step as [x] there too. Also update the feature's aidlc-state.md if applicable. This keeps both the Kiro spec and AI-DLC plan in sync.\n\nPROTOTYPE AWARENESS: Check aidlc-state.md for the Build Path.\n- If a prototype task was completed (from prototype-code-generation-plan.md), sync it back to the prototype plan\n- If ALL prototype tasks are now complete, update Prototype Status to 'Complete' in aidlc-state.md and present the prototype review gate\n- If the feature is in enterprise transition and an enterprise task was completed, sync normally and also check if this completes a unit — if so, log the unit completion in audit.md\n- If vibe-coded changes were made during prototype (tasks with [VIBE-ADDED] tag), ensure these are tracked in both the prototype plan and the enterprise plan (when it exists)"
   }
 }

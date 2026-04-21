@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Push User Stories to PM Tool",
+  "description": "When AI-DLC user story files are approved and finalized, pushes stories to the configured PM tool with acceptance criteria and links them to parent FRs/Features.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["aidlc-docs/*/inception/user-stories/*.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC PM Push (Stories): A user stories file was updated. Check aidlc-state.md for PM Tool Configuration. If sync is enabled:\n\n1. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/user-stories/...)\n2. Parse the stories file for individual user stories\n3. For each story: create or update a User Story work item in the PM tool\n4. Include acceptance criteria in the work item description\n5. Link each story to its parent FR Feature (using the PM Tool Mapping in aidlc-state.md)\n6. Tag with priority and story points if available\n7. Update the PM Tool Mapping in aidlc-state.md with story item IDs\n8. Log the sync action in audit.md\n\nIf PM tool sync is not enabled, skip silently."
+  }
+}

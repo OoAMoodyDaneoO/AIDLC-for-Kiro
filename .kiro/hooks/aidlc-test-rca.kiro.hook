@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Test RCA Gate",
+  "description": "Before any test file is modified, checks if the Test Evidence extension is enabled and enforces mandatory RCA documentation before test changes are allowed. Prevents the anti-pattern of modifying tests to pass without root cause analysis.",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Test RCA Gate: You are about to write to a file. Check if this file is a test file (matches patterns like *.test.*, *.spec.*, *_test.*, test_*.*, */tests/*, */test/*, */__tests__/*). If it IS a test file:\n\n1. Check aidlc-state.md for the active feature and whether the Test Evidence extension is enabled\n2. If enabled, check whether an RCA has been documented for any failing tests in this file BEFORE allowing the modification\n3. If tests in this file are failing and NO RCA exists yet, DENY the write and instruct: 'Test Evidence governance requires a Root Cause Analysis (RCA) before modifying test files with failures. Please run the tests first, document the RCA, then retry.'\n4. If the modification weakens assertions, removes test cases, or changes expected values, flag this and require explicit justification\n5. If RCA exists or this is a new test file (not modifying existing failing tests), allow the write to proceed\n\nIf the file is NOT a test file, allow the write to proceed without intervention."
+  }
+}

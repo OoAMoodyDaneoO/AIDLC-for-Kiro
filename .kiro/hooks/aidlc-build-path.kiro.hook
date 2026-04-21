@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Build Path Selection",
+  "description": "When a code generation plan is about to be created, checks if the Build Path extension is enabled and whether the user has chosen between a lightweight prototype or enterprise-grade build. If not yet asked, presents the choice before allowing code generation to proceed.",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": ["aidlc-docs/*/construction/plans/*-code-generation-plan.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Build Path Gate: A code generation plan is being created. Check aidlc-state.md for the active feature and whether the Build Path extension is enabled. If enabled:\n\n1. Check if a Build Path section already exists in aidlc-state.md with a selected path\n2. If NO build path has been selected yet:\n   a. STOP code generation planning\n   b. Present the build path question: 'Your design is complete and units/tasks are defined. How would you like to proceed? A) Prototype First — Create a lightweight, working prototype to sense-check the design before the full enterprise build. B) Enterprise-Grade Build — Proceed directly to the full implementation.'\n   c. Wait for user response\n   d. Record the choice in aidlc-state.md under a Build Path section\n   e. If Prototype First: create a prototype unit with a lightweight code generation plan covering: project scaffolding, core data model, primary business logic (happy path only), basic UI/API, smoke tests, and README with run instructions. The prototype MUST use the same tech stack as the full build but skip production NFRs, comprehensive tests, IaC, and auth (unless core).\n   f. If Enterprise-Grade Build: record 'Prototype Status: Skipped' and allow code generation to proceed normally\n3. If build path IS already selected:\n   a. If 'Prototype First' and prototype is not yet complete, ensure the current plan is for the prototype unit\n   b. If prototype is complete and approved, allow full build code generation to proceed\n   c. If 'Enterprise-Grade Build', allow code generation to proceed\n4. Log the gate check in audit.md\n\nIf Build Path extension is not enabled, allow code generation to proceed without intervention."
+  }
+}

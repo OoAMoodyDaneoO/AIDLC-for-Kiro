@@ -26,13 +26,38 @@ Check if `aidlc-docs/aidlc-state.md` exists:
 - **Workspace Root**: [Absolute path]
 ```
 
+## Step 2.5: Check for Existing Starting Point (Greenfield Only)
+
+**IF workspace is empty (no existing code)**, ask the user:
+
+```markdown
+## Question: Existing Starting Point
+Do you have an existing prototype, proof-of-concept, or source code that should serve as a starting point for this project?
+
+A) Yes — I have source code already in this workspace directory
+B) Yes — I have code in a separate repository that I need to import first
+C) Yes — I have a prototype/PoC that I'd like Kiro to review and understand before we proceed
+D) No — this is a completely new project starting from scratch
+
+[Answer]:
+```
+
+**Handling Responses:**
+
+- **If A**: Re-scan workspace — if code found, treat as brownfield. Provide a summary of detected code and ask user to confirm understanding.
+- **If B**: Ask user to import/clone code into workspace. Wait for confirmation, then re-scan and treat as brownfield.
+- **If C**: Ask user to point to the prototype location. Analyze and provide structured summary (tech stack, components, architecture patterns, data models, APIs, test coverage, incomplete areas). Ask: "Is this accurate? What should we keep, redesign, or discard?" Use confirmed understanding as input to Requirements Analysis. Treat as brownfield.
+- **If D**: Proceed with standard greenfield flow.
+
+Log the user's response in audit.md.
+
 ## Step 3: Determine Next Phase
 
-**IF workspace is empty (no existing code)**:
+**IF workspace is empty (no existing code) AND user answered D (completely new)**:
 - Set flag: `brownfield = false`
 - Next phase: Requirements Analysis
 
-**IF workspace has existing code**:
+**IF workspace has existing code (or user answered A/B/C above)**:
 - Set flag: `brownfield = true`
 - Check for existing reverse engineering artifacts in `aidlc-docs/inception/reverse-engineering/`
 - **IF reverse engineering artifacts exist**:

@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Cost Estimation",
+  "description": "Manually triggered hook to generate infrastructure cost estimates from design artifacts. Feeds into ARB and PTO documents.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Cost Estimation: Generate cost estimates for the active feature. Read infrastructure design artifacts from aidlc-docs/{feature}/construction/*/infrastructure-design/. Based on identified services:\n\n1. List all cloud services/resources required\n2. Estimate monthly costs per resource\n3. Calculate annual costs\n4. Project 3-year TCO including operational costs\n5. Identify cost optimization opportunities\n6. Note assumptions\n\nIf AWS Pricing MCP is available, use it. Otherwise use reasonable public pricing estimates.\n\nStore at aidlc-docs/{feature}/construction/adrs/cost-estimate.md\nThis feeds into ARB artifact and PTO document.\nLog in audit.md."
+  }
+}

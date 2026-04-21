@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Design Review Checkpoint",
+  "description": "Manually triggered design review that compares implementation against approved design artifacts, detects drift, and generates a remediation plan. Trigger this at any point during or after Construction to validate alignment with enterprise standards.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Design Review: The user has triggered a design review checkpoint. Check aidlc-state.md for the active feature and whether the Design Review extension is enabled. If enabled, perform a comprehensive design review:\n\n1. Load all approved design artifacts (functional design, NFR requirements, NFR design, infrastructure design, ADRs, ARB artifact if exists)\n2. Scan the current implementation code in the workspace\n3. Compare implementation against each design artifact — identify discrepancies\n4. For each drift item, classify: Architecture Drift, Security Drift, NFR Drift, Implementation Drift, or Standards Drift\n5. Assign severity: Critical, High, Medium, Low\n6. Calculate overall drift score (percentage of design elements that have drifted)\n7. Generate a remediation plan for each drift item with effort estimate and priority\n8. Store the report at aidlc-docs/{feature-name}/construction/adrs/design-review-{YYYY-MM-DD}.md\n9. If PM tool sync is enabled in aidlc-state.md, push Critical and High severity items as issues/bugs linked to the Epic\n10. Log the review in audit.md\n\nPresent findings to the user with the drift score and remediation summary."
+  }
+}

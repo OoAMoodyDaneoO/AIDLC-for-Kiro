@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "AI-DLC: Sync Requirements to Spec",
-  "description": "When AI-DLC inception requirement files are edited, updates the corresponding Kiro project spec requirement.md.",
-  "version": "1",
+  "description": "When AI-DLC inception requirement files are edited, updates the corresponding Kiro project spec requirement.md. Prototype-aware: handles [VIBE-ADDED] items from prototype vibe coding sessions feeding into enterprise requirements.",
+  "version": "2",
   "when": {
     "type": "fileEdited",
     "patterns": ["aidlc-docs/*/inception/requirements/*.md"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "AI-DLC Spec Sync: An AI-DLC inception requirements file was updated. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/requirements/...). Then check if .kiro/specs/project-specs/{feature-name}/requirement.md exists. If it does, update it to reflect the latest requirements. Add #[[file:...]] references. If the spec doesn't exist yet, skip this sync."
+    "prompt": "AI-DLC Spec Sync: An AI-DLC inception requirements file was updated. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/requirements/...). Then check if .kiro/specs/project-specs/{feature-name}/requirement.md exists. If it does, update it to reflect the latest requirements. Add #[[file:...]] references. If the spec doesn't exist yet, skip this sync.\n\nPROTOTYPE & VIBE AWARENESS: Check aidlc-state.md for the Build Path.\n- If requirements contain [VIBE-ADDED] items (added during prototype vibe coding sessions), ensure these are clearly marked in the spec as originating from prototype feedback\n- If the feature is in enterprise transition, ensure [VIBE-ADDED] requirements are integrated into the enterprise requirements spec alongside the original requirements\n- If PM tool sync is enabled and new [VIBE-ADDED] requirements were added, flag them for PM tool push as new work items linked to the feature epic"
   }
 }

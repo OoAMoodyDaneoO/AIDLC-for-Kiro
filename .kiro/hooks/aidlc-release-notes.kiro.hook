@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Generate Release Notes",
+  "description": "Manually triggered hook to auto-generate release notes from completed user stories, test evidence, design decisions, and code generation summaries.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Release Notes: The user wants to generate release notes. Check aidlc-state.md for the active feature. Generate release notes by consolidating:\n\n1. Feature name and description from refined-intent.md\n2. Completed user stories with acceptance criteria status\n3. Key design decisions from ADRs\n4. Technology stack from NFR design\n5. Test evidence summary (pass rates, coverage)\n6. Known issues or accepted risks\n7. Breaking changes (if brownfield)\n8. Migration notes (if applicable)\n\nFormat at aidlc-docs/{feature}/operations/release-notes.md with sections: What's New, Technical Changes, Test Results, Known Issues, Migration Guide.\n\nIf PM tool sync enabled, push as comment on the Epic.\nLog in audit.md."
+  }
+}

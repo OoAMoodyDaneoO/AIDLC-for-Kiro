@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "AI-DLC: Create Kiro Spec After Inception",
-  "description": "When the Workflow Planning execution plan is created (last mandatory Inception stage), triggers creation of the Kiro project spec from all accumulated AI-DLC artifacts.",
-  "version": "1",
+  "description": "When the Workflow Planning execution plan is created, triggers creation of the Kiro project spec. Prototype-aware: for prototype path, creates a lightweight spec; for enterprise transition, updates the spec with full enterprise artifacts.",
+  "version": "2",
   "when": {
     "type": "fileCreated",
     "patterns": ["aidlc-docs/*/inception/plans/execution-plan.md"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "AI-DLC Spec Creation: The Workflow Planning execution plan was just created, signaling Inception is complete. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/plans/execution-plan.md). Now create the Kiro project spec at .kiro/specs/project-specs/{feature-name}/ with three files: requirement.md (summarized from inception requirements + user stories), design.md (summarized from execution plan + application design), and tasks.md (construction steps as Kiro tasks). Add #[[file:...]] references linking back to the AI-DLC artifacts. This is the ONLY time the spec should be initially created — sync hooks handle subsequent updates."
+    "prompt": "AI-DLC Spec Creation: The Workflow Planning execution plan was just created, signaling Inception is complete. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/plans/execution-plan.md). Now create the Kiro project spec at .kiro/specs/project-specs/{feature-name}/ with three files: requirement.md (summarized from inception requirements + user stories), design.md (summarized from execution plan + application design), and tasks.md (construction steps as Kiro tasks). Add #[[file:...]] references linking back to the AI-DLC artifacts. This is the ONLY time the spec should be initially created — sync hooks handle subsequent updates.\n\nPROTOTYPE AWARENESS: Check aidlc-state.md for the Build Path.\n- If 'Prototype First' (Entry Point 1): create a lightweight spec with minimal requirements and a single prototype unit in tasks.md. Mark it as [PROTOTYPE] so it's clear this is not the final enterprise spec.\n- If 'Enterprise-Grade Build' or enterprise transition: create the full spec as normal.\n- If 'Prototype First (Post-Design)' (Entry Point 2): the spec should already exist from the enterprise design stages — update it to add the prototype unit tasks rather than recreating."
   }
 }

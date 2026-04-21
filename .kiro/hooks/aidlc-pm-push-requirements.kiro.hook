@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Push Requirements to PM Tool",
+  "description": "When AI-DLC requirements files are approved and finalized, pushes FRs, NFRs, and Epics to the configured PM tool with proper hierarchy and linking.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["aidlc-docs/*/inception/requirements/requirements.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC PM Push (Requirements): A requirements file was updated. Check aidlc-state.md for PM Tool Configuration. If sync is enabled:\n\n1. Extract the feature name from the file path\n2. Check if an Epic already exists for this feature in the PM tool — if not, create one\n3. Parse the requirements file for FRs and NFRs\n4. For each FR: create or update a Feature/Story work item linked to the Epic\n5. For each NFR: create or update a Feature/Story work item linked to the Epic with an NFR label\n6. Ensure all items are properly linked in the hierarchy: Epic > Feature/Story\n7. Store the PM tool item IDs in aidlc-state.md under a PM Tool Mapping section\n8. Log the sync action in audit.md\n\nIf PM tool sync is not enabled, skip silently."
+  }
+}

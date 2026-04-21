@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "AI-DLC: Sync Design to Spec",
-  "description": "When AI-DLC inception plans or application design files are edited, updates the corresponding Kiro project spec design.md.",
-  "version": "1",
+  "description": "When AI-DLC inception plans or application design files are edited, updates the corresponding Kiro project spec design.md. Prototype-aware: handles simplified prototype designs and enterprise transition design upgrades.",
+  "version": "2",
   "when": {
     "type": "fileEdited",
     "patterns": ["aidlc-docs/*/inception/plans/*.md", "aidlc-docs/*/inception/application-design/*.md"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "AI-DLC Spec Sync: An AI-DLC inception plan or application design file was updated. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/...). Then check if .kiro/specs/project-specs/{feature-name}/design.md exists. If it does, update it to reflect the latest execution plan and design artifacts. Add #[[file:...]] references. If the spec doesn't exist yet, skip this sync."
+    "prompt": "AI-DLC Spec Sync: An AI-DLC inception plan or application design file was updated. Extract the feature name from the file path (aidlc-docs/{feature-name}/inception/...). Then check if .kiro/specs/project-specs/{feature-name}/design.md exists. If it does, update it to reflect the latest execution plan and design artifacts. Add #[[file:...]] references. If the spec doesn't exist yet, skip this sync.\n\nPROTOTYPE AWARENESS: Check aidlc-state.md for the Build Path.\n- If 'Prototype First' (Entry Point 1): the design spec should be marked as [PROTOTYPE] — simplified, not the final enterprise design\n- If the feature is in enterprise transition (Enterprise Loop: 'In Progress'), the design is being upgraded to full enterprise depth — update the spec to reflect the comprehensive design, removing any [PROTOTYPE] markers\n- If 'Prototype First (Post-Design)' (Entry Point 2): the design was already at enterprise depth — sync normally\n- If design deviations were identified during prototype vibe coding, ensure these are flagged in the design spec for review during enterprise transition"
   }
 }

@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Phase Retrospective",
+  "description": "Manually triggered hook to capture a retrospective at the end of any phase. Prompts for what went well, what didn't, and what to improve.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC Retrospective: The user wants to capture a retrospective. Check aidlc-state.md for the active feature and current stage. Ask three questions in chat:\n\n1. What went well?\n2. What didn't go well?\n3. What should we improve?\n\nAfter collecting answers, append a retrospective entry to aidlc-docs/{feature}/audit.md:\n\n## Retrospective — [Phase/Stage Name]\n**Timestamp**: [ISO timestamp]\n**What went well**: [answer]\n**What didn't go well**: [answer]\n**What to improve**: [answer]\n**AI Observations**: [patterns from audit trail — stages that took long, skipped stages, vibe-added items suggesting scope creep]\n\nAlso update aidlc-state.md with a Retrospectives section."
+  }
+}

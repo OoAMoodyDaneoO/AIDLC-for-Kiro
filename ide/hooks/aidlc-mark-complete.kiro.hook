@@ -1,13 +1,13 @@
 {
   "enabled": true,
   "name": "AI-DLC: Update Progress",
-  "description": "After the agent stops, marks completed steps in active plan files and updates aidlc-state.md.",
-  "version": "1",
+  "description": "After the agent stops, marks completed steps in active plan files and updates aidlc-state.md. Prototype-aware: handles prototype plan files and prototype status transitions.",
+  "version": "2",
   "when": {
     "type": "agentStop"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "AI-DLC Progress Update: If you were executing steps from an AI-DLC plan file (in aidlc-docs/*/inception/plans/ or aidlc-docs/*/construction/plans/), mark completed steps as [x]. Also update the feature's aidlc-state.md if it exists. If no plan was active, skip."
+    "prompt": "AI-DLC Progress Update: If you were executing steps from an AI-DLC plan file (in aidlc-docs/*/inception/plans/ or aidlc-docs/*/construction/plans/), mark completed steps as [x]. Also update the feature's aidlc-state.md if it exists. If no plan was active, skip.\n\nPROTOTYPE AWARENESS: Also check for prototype-specific plan files (aidlc-docs/*/construction/plans/prototype-code-generation-plan.md). If prototype plan steps were completed:\n1. Mark them as [x] in the prototype plan\n2. Update aidlc-state.md Prototype Status: if all prototype plan steps are done, set to 'Complete'\n3. If Prototype Status just changed to 'Complete', present the prototype review gate to the user with next-step options (Iterate, Transition to Enterprise, Use as Brownfield, Discard)\n4. If the feature is in enterprise transition (Enterprise Loop: 'In Progress'), update enterprise plan progress normally"
   }
 }

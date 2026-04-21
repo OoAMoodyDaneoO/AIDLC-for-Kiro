@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "AI-DLC: Push Test Evidence to PM Tool",
+  "description": "When test evidence documents are created or updated, pushes them to the configured PM tool. On test failures, creates Bug/Defect work items with RCA summaries linked to parent stories.",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": ["aidlc-docs/*/construction/build-and-test/test-evidence-*.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "AI-DLC PM Push (Test Evidence): A test evidence document was created. Check aidlc-state.md for PM Tool Configuration AND Test Evidence extension status. If BOTH are enabled:\n\n1. Extract the feature name from the file path\n2. Read the test evidence document\n3. If all tests passed: attach the evidence document as a link/comment to the relevant parent work items\n4. If tests failed:\n   a. For each failed test with an RCA entry: create a Bug/Defect work item\n   b. Include the RCA summary in the bug description\n   c. Include remediation plan steps as sub-tasks on the bug\n   d. Link the bug to the parent User Story work item\n   e. Set priority based on RCA severity classification\n5. Update PM Tool Mapping in aidlc-state.md with bug item IDs\n6. Log the sync action in audit.md\n\nIf PM tool sync or Test Evidence extension is not enabled, skip silently."
+  }
+}

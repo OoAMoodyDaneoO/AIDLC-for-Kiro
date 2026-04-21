@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "AI-DLC: Plan Before Execute",
-  "description": "Before any write operation, reminds the agent to follow the AI-DLC plan-then-validate-then-execute cycle.",
-  "version": "1",
+  "description": "Before any write operation, reminds the agent to follow the AI-DLC plan-then-validate-then-execute cycle. Prototype-aware: relaxes plan requirements during prototype builds and vibe coding sessions.",
+  "version": "2",
   "when": {
     "type": "preToolUse",
     "toolTypes": ["write"]
   },
   "then": {
     "type": "askAgent",
-    "prompt": "AI-DLC Checkpoint: Before writing this file, verify you are following the AI-DLC workflow. ALWAYS ALLOWED without a plan: writing to .kiro/ (steering, hooks, rule-details, specs), writing to aidlc-docs/*/audit.md, writing to aidlc-docs/*/inception/intent/ (intent artifacts are mandatory), writing plan files to aidlc-docs/*/inception/plans/ or aidlc-docs/*/construction/plans/, and writing aidlc-docs/*/aidlc-state.md. For ALL OTHER writes (code, design artifacts, stories, requirements), confirm: 1) A corresponding plan .md file exists with checkboxes, 2) The user has explicitly approved the plan, 3) You are executing an approved step. If not, stop and create the plan first."
+    "prompt": "AI-DLC Checkpoint: Before writing this file, verify you are following the AI-DLC workflow. ALWAYS ALLOWED without a plan: writing to .kiro/ (steering, hooks, rule-details, specs), writing to aidlc-docs/*/audit.md, writing to aidlc-docs/*/inception/intent/ (intent artifacts are mandatory), writing plan files to aidlc-docs/*/inception/plans/ or aidlc-docs/*/construction/plans/, and writing aidlc-docs/*/aidlc-state.md. For ALL OTHER writes (code, design artifacts, stories, requirements), confirm: 1) A corresponding plan .md file exists with checkboxes, 2) The user has explicitly approved the plan, 3) You are executing an approved step. If not, stop and create the plan first.\n\nPROTOTYPE EXCEPTION: Check aidlc-state.md for the active feature's Build Path. If Selected Path is 'Prototype First' or 'Prototype First (Post-Design)' AND Prototype Status is 'In Progress', then application code writes are ALLOWED with a simplified prototype code generation plan (does not require the full enterprise plan structure). The prototype plan in aidlc-docs/{feature}/construction/plans/prototype-code-generation-plan.md is sufficient. Vibe-coded changes on top of a completed prototype (Prototype Status: 'Complete') are also ALLOWED — the vibe-sync mechanism will handle gap analysis separately."
   }
 }
